@@ -26,7 +26,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 def load_bundle():
-    bundle = joblib.load("model_bundle.pkl")
+    bundle = joblib.load("model/model_bundle.pkl")
     model = load_model(bundle.model_path)
     return model, bundle.vocab
 
