@@ -25,12 +25,11 @@ st.markdown("""
         }
     </style>
 """, unsafe_allow_html=True)
-def load_bundle():
-    bundle = joblib.load("model/model_bundle.pkl")
-    model = load_model(bundle.model_path)
-    return model, bundle.vocab
-
-model, vocab = load_bundle()
+def load_model_and_vocab():
+    bundle = joblib.load("model_bundle.pkl")
+    model = tf.keras.models.load_model(bundle["model_path"])
+    vocab = bundle["vocab"]
+    return model, vocab
 
 emotion_labels = ['sadness', 'joy', 'love', 'anger', 'fear', 'surprise']
 emoji_map = {
