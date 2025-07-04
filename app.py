@@ -1,12 +1,12 @@
 import streamlit as st
-import tensorflow as tf
 import numpy as np
 import pickle
 import pandas as pd
 import altair as alt
 import spacy
+import joblib
 
-# Background style (dark blue to sky blue)
+# Background styling
 st.markdown("""
     <style>
         .stApp {
@@ -26,10 +26,10 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Load model and vocab
+# Load model and vocab (from pkl files)
 @st.cache_resource
 def load_model():
-    return tf.keras.models.load_model("model/best_emotion_model.h5")
+    return joblib.load("model/best_emotion_model.pkl")
 
 @st.cache_resource
 def load_vocab():
@@ -46,6 +46,7 @@ emoji_map = {
 }
 MAX_LEN = 10
 
+# Load spaCy tokenizer
 nlp = spacy.load("en_core_web_sm", disable=["parser", "ner"])
 
 def preprocess_text(text, vocab, max_len=MAX_LEN):
@@ -58,7 +59,7 @@ def preprocess_text(text, vocab, max_len=MAX_LEN):
         token_ids = token_ids[:max_len]
     return np.array([token_ids])
 
-# Title
+# UI Title
 st.markdown("""
     <div style='text-align: center; padding-top: 10px;'>
         <h1 style='color:#4e79a7;'>Tweet Emotion Classifier 💬</h1>
@@ -81,7 +82,7 @@ if st.button("Predict Emotion"):
         st.warning("Please enter something.")
     else:
         input_seq = preprocess_text(tweet, vocab)
-        prediction = model.predict(input_seq)
+        prediction = model.predict(input_seq, verbose=0)
         predicted_label = emotion_labels[np.argmax(prediction)]
         confidence = np.max(prediction)
 
