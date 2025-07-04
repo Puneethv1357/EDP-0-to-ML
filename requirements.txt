@@ -3,3 +3,8 @@ tensorflow==2.13.0
 spacy==3.7.2
 pandas
 altair
+joblib
+scikit-learn
+matplotlib
+seaborn
+pandas
