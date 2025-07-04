@@ -29,7 +29,7 @@ st.markdown("""
 # Load model and vocab (from pkl files)
 @st.cache_resource
 def load_model():
-    return tf.keras.models.load_model("model/best_emotion_model.keras")
+    return tf.keras.models.load_model("model/best_emotion_model.h5")
 
 @st.cache_resource
 def load_vocab():
