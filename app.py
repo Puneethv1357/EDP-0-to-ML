@@ -29,12 +29,13 @@ st.markdown("""
 # Load model and vocab (from pkl files)
 @st.cache_resource
 def load_model():
-    return joblib.load("model/best_emotion_model.pkl")
+    return tf.keras.models.load_model("model/best_emotion_model.keras")
 
 @st.cache_resource
 def load_vocab():
     with open("tokenizer/vocab.pkl", "rb") as f:
         return pickle.load(f)
+
 
 model = load_model()
 vocab = load_vocab()
