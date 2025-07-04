@@ -28,9 +28,11 @@ st.markdown("""
 
 # ✅ Load model and vocab from separate .pkl files
 @st.cache_resource
+@st.cache_resource
 def load_model():
-    with open("model/best_emotion_model.pkl", "rb") as f:
-        return pickle.load(f)
+    import joblib
+    return joblib.load("model/best_emotion_model.pkl")
+
 
 @st.cache_resource
 def load_vocab():
