@@ -6,7 +6,7 @@ import altair as alt
 import spacy
 import tensorflow as tf
 
-# 🎨 UI Styling
+# Styling
 st.markdown("""
     <style>
         .stApp {
@@ -26,13 +26,10 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# ✅ Load model and vocab from separate .pkl files
-@st.cache_resource
+# Load model and vocab
 @st.cache_resource
 def load_model():
-    import joblib
-    return joblib.load("model/best_emotion_model.pkl")
-
+    return tf.keras.models.load_model("model/best_emotion_model.h5")
 
 @st.cache_resource
 def load_vocab():
@@ -42,7 +39,6 @@ def load_vocab():
 model = load_model()
 vocab = load_vocab()
 
-# Emotion labels and emojis
 emotion_labels = ['sadness', 'joy', 'love', 'anger', 'fear', 'surprise']
 emoji_map = {
     'joy': '😊', 'sadness': '😢', 'anger': '😠',
@@ -51,7 +47,11 @@ emoji_map = {
 MAX_LEN = 10
 
 # Load spaCy model
-nlp = spacy.load("en_core_web_sm", disable=["parser", "ner"])
+try:
+    nlp = spacy.load("en_core_web_sm", disable=["parser", "ner"])
+except OSError:
+    st.error("spaCy model not found. Add 'python -m spacy download en_core_web_sm' to setup.sh or install manually.")
+    st.stop()
 
 def preprocess_text(text, vocab, max_len=MAX_LEN):
     doc = nlp(text)
@@ -63,7 +63,7 @@ def preprocess_text(text, vocab, max_len=MAX_LEN):
         token_ids = token_ids[:max_len]
     return np.array([token_ids])
 
-# 🧠 App UI
+# App title
 st.markdown("""
     <div style='text-align: center; padding-top: 10px;'>
         <h1 style='color:#4e79a7;'>Tweet Emotion Classifier 💬</h1>
@@ -71,11 +71,16 @@ st.markdown("""
     </div>
 """, unsafe_allow_html=True)
 
+# Input
 st.markdown("<div class='centered-textarea'>", unsafe_allow_html=True)
-tweet = st.text_area("Your Tweet or Review:", placeholder="e.g. I'm feeling great today!", height=140)
+tweet = st.text_area(
+    label="Your Tweet or Review:",
+    placeholder="e.g. I'm feeling great today!",
+    height=140
+)
 st.markdown("</div>", unsafe_allow_html=True)
 
-# 🚀 Prediction
+# Predict
 if st.button("Predict Emotion"):
     if not tweet.strip():
         st.warning("Please enter something.")
@@ -104,3 +109,4 @@ if st.button("Predict Emotion"):
         ).properties(width=500)
 
         st.altair_chart(chart, use_container_width=True)
+
