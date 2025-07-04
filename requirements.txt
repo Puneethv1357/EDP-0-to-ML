@@ -1,5 +1,9 @@
 streamlit
-tensorflow>=2.11
 spacy
+tensorflow
+numpy
 pandas
+scikit-learn
+matplotlib
+seaborn
 altair
