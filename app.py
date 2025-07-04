@@ -4,9 +4,9 @@ import pickle
 import pandas as pd
 import altair as alt
 import spacy
-import joblib
 import tensorflow as tf
-# Background styling
+
+# 🎨 UI Styling
 st.markdown("""
     <style>
         .stApp {
@@ -26,20 +26,21 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Load model and vocab (from pkl files)
+# ✅ Load model and vocab from separate .pkl files
 @st.cache_resource
 def load_model():
-    return tf.keras.models.load_model("model/best_emotion_model.h5")
+    with open("model/best_emotion_model.pkl", "rb") as f:
+        return pickle.load(f)
 
 @st.cache_resource
 def load_vocab():
     with open("tokenizer/vocab.pkl", "rb") as f:
         return pickle.load(f)
 
-
 model = load_model()
 vocab = load_vocab()
 
+# Emotion labels and emojis
 emotion_labels = ['sadness', 'joy', 'love', 'anger', 'fear', 'surprise']
 emoji_map = {
     'joy': '😊', 'sadness': '😢', 'anger': '😠',
@@ -47,7 +48,7 @@ emoji_map = {
 }
 MAX_LEN = 10
 
-# Load spaCy tokenizer
+# Load spaCy model
 nlp = spacy.load("en_core_web_sm", disable=["parser", "ner"])
 
 def preprocess_text(text, vocab, max_len=MAX_LEN):
@@ -60,7 +61,7 @@ def preprocess_text(text, vocab, max_len=MAX_LEN):
         token_ids = token_ids[:max_len]
     return np.array([token_ids])
 
-# UI Title
+# 🧠 App UI
 st.markdown("""
     <div style='text-align: center; padding-top: 10px;'>
         <h1 style='color:#4e79a7;'>Tweet Emotion Classifier 💬</h1>
@@ -68,16 +69,11 @@ st.markdown("""
     </div>
 """, unsafe_allow_html=True)
 
-# Input
 st.markdown("<div class='centered-textarea'>", unsafe_allow_html=True)
-tweet = st.text_area(
-    label="Your Tweet or Review:",
-    placeholder="e.g. I'm feeling great today!",
-    height=140
-)
+tweet = st.text_area("Your Tweet or Review:", placeholder="e.g. I'm feeling great today!", height=140)
 st.markdown("</div>", unsafe_allow_html=True)
 
-# Predict
+# 🚀 Prediction
 if st.button("Predict Emotion"):
     if not tweet.strip():
         st.warning("Please enter something.")
