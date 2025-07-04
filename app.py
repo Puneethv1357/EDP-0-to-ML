@@ -4,8 +4,8 @@ import pickle
 import pandas as pd
 import altair as alt
 import spacy
-import tensorflow as tf
-
+from tensorflow.keras.models import load_model
+import joblib
 # Styling
 st.markdown("""
     <style>
@@ -25,19 +25,12 @@ st.markdown("""
         }
     </style>
 """, unsafe_allow_html=True)
+def load_bundle():
+    bundle = joblib.load("model_bundle.pkl")
+    model = load_model(bundle.model_path)
+    return model, bundle.vocab
 
-# Load model and vocab
-@st.cache_resource
-def load_model():
-    return tf.keras.models.load_model("model/best_emotion_model.h5")
-
-@st.cache_resource
-def load_vocab():
-    with open("tokenizer/vocab.pkl", "rb") as f:
-        return pickle.load(f)
-
-model = load_model()
-vocab = load_vocab()
+model, vocab = load_bundle()
 
 emotion_labels = ['sadness', 'joy', 'love', 'anger', 'fear', 'surprise']
 emoji_map = {
