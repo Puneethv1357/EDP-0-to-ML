@@ -1,7 +1,5 @@
-streamlit
-tensorflow==2.12.0
-spacy
-altair
+streamlit==1.26.0
+tensorflow==2.13.0
+spacy==3.7.2
 pandas
-numpy
-scikit-learn
+altair
