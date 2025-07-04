@@ -1,0 +1,106 @@
+import streamlit as st
+import tensorflow as tf
+import numpy as np
+import pickle
+import pandas as pd
+import altair as alt
+import spacy
+
+# Background style (dark blue to sky blue)
+st.markdown("""
+    <style>
+        .stApp {
+            background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+            background-attachment: fixed;
+        }
+        .centered-textarea textarea {
+            margin: 0 auto;
+            display: block;
+            border-radius: 10px;
+            font-size: 16px;
+            padding: 10px;
+        }
+        h1, h2, p, label {
+            color: white !important;
+        }
+    </style>
+""", unsafe_allow_html=True)
+
+# Load model and vocab
+@st.cache_resource
+def load_model():
+    return tf.keras.models.load_model("model/best_emotion_model.h5")
+
+@st.cache_resource
+def load_vocab():
+    with open("tokenizer/vocab.pkl", "rb") as f:
+        return pickle.load(f)
+
+model = load_model()
+vocab = load_vocab()
+
+emotion_labels = ['sadness', 'joy', 'love', 'anger', 'fear', 'surprise']
+emoji_map = {
+    'joy': '😊', 'sadness': '😢', 'anger': '😠',
+    'love': '❤️', 'fear': '😨', 'surprise': '😲'
+}
+MAX_LEN = 10
+
+nlp = spacy.load("en_core_web_sm", disable=["parser", "ner"])
+
+def preprocess_text(text, vocab, max_len=MAX_LEN):
+    doc = nlp(text)
+    tokens = [token.lemma_.lower() for token in doc if not token.is_stop and not token.is_punct and token.is_alpha]
+    token_ids = [vocab.get(token, 0) for token in tokens]
+    if len(token_ids) < max_len:
+        token_ids += [0] * (max_len - len(token_ids))
+    else:
+        token_ids = token_ids[:max_len]
+    return np.array([token_ids])
+
+# Title
+st.markdown("""
+    <div style='text-align: center; padding-top: 10px;'>
+        <h1 style='color:#4e79a7;'>Tweet Emotion Classifier 💬</h1>
+        <p style='color:#5d63b9;'>Type a tweet or review to find its emotion.</p>
+    </div>
+""", unsafe_allow_html=True)
+
+# Input
+st.markdown("<div class='centered-textarea'>", unsafe_allow_html=True)
+tweet = st.text_area(
+    label="Your Tweet or Review:",
+    placeholder="e.g. I'm feeling great today!",
+    height=140
+)
+st.markdown("</div>", unsafe_allow_html=True)
+
+# Predict
+if st.button("Predict Emotion"):
+    if not tweet.strip():
+        st.warning("Please enter something.")
+    else:
+        input_seq = preprocess_text(tweet, vocab)
+        prediction = model.predict(input_seq)
+        predicted_label = emotion_labels[np.argmax(prediction)]
+        confidence = np.max(prediction)
+
+        st.markdown(f"""
+            <div style='text-align: center; padding-top: 20px;'>
+                <h2>{predicted_label} {emoji_map[predicted_label]}</h2>
+                <p>Confidence: <code>{confidence:.2f}</code></p>
+            </div>
+        """, unsafe_allow_html=True)
+
+        probs_df = pd.DataFrame({
+            "Emotion": emotion_labels,
+            "Confidence": prediction.flatten()
+        })
+
+        chart = alt.Chart(probs_df).mark_bar().encode(
+            x=alt.X('Emotion', sort=None),
+            y='Confidence',
+            color=alt.value("#4e79a7")
+        ).properties(width=500)
+
+        st.altair_chart(chart, use_container_width=True)
