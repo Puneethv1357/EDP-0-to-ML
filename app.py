@@ -1,11 +1,11 @@
 import streamlit as st
 import numpy as np
-import pickle
 import pandas as pd
 import altair as alt
 import spacy
-from tensorflow.keras.models import load_model
+import tensorflow as tf
 import joblib
+
 # Styling
 st.markdown("""
     <style>
@@ -25,12 +25,28 @@ st.markdown("""
         }
     </style>
 """, unsafe_allow_html=True)
+
+# Load model and vocab
+@st.cache_resource
 def load_model_and_vocab():
     bundle = joblib.load("model_bundle.pkl")
     model = tf.keras.models.load_model(bundle["model_path"])
     vocab = bundle["vocab"]
     return model, vocab
 
+# Load spaCy model (cached and lazy)
+@st.cache_resource
+def load_spacy():
+    try:
+        return spacy.load("en_core_web_sm", disable=["parser", "ner"])
+    except OSError:
+        st.error("spaCy model not found. Please ensure setup.sh contains 'python -m spacy download en_core_web_sm'.")
+        st.stop()
+
+model, vocab = load_model_and_vocab()
+nlp = load_spacy()
+
+# Constants
 emotion_labels = ['sadness', 'joy', 'love', 'anger', 'fear', 'surprise']
 emoji_map = {
     'joy': '😊', 'sadness': '😢', 'anger': '😠',
@@ -38,13 +54,7 @@ emoji_map = {
 }
 MAX_LEN = 10
 
-# Load spaCy model
-try:
-    nlp = spacy.load("en_core_web_sm", disable=["parser", "ner"])
-except OSError:
-    st.error("spaCy model not found. Add 'python -m spacy download en_core_web_sm' to setup.sh or install manually.")
-    st.stop()
-
+# Preprocessing function
 def preprocess_text(text, vocab, max_len=MAX_LEN):
     doc = nlp(text)
     tokens = [token.lemma_.lower() for token in doc if not token.is_stop and not token.is_punct and token.is_alpha]
@@ -55,7 +65,7 @@ def preprocess_text(text, vocab, max_len=MAX_LEN):
         token_ids = token_ids[:max_len]
     return np.array([token_ids])
 
-# App title
+# App title and input
 st.markdown("""
     <div style='text-align: center; padding-top: 10px;'>
         <h1 style='color:#4e79a7;'>Tweet Emotion Classifier 💬</h1>
@@ -63,7 +73,6 @@ st.markdown("""
     </div>
 """, unsafe_allow_html=True)
 
-# Input
 st.markdown("<div class='centered-textarea'>", unsafe_allow_html=True)
 tweet = st.text_area(
     label="Your Tweet or Review:",
@@ -72,7 +81,7 @@ tweet = st.text_area(
 )
 st.markdown("</div>", unsafe_allow_html=True)
 
-# Predict
+# Predict button
 if st.button("Predict Emotion"):
     if not tweet.strip():
         st.warning("Please enter something.")
@@ -82,6 +91,7 @@ if st.button("Predict Emotion"):
         predicted_label = emotion_labels[np.argmax(prediction)]
         confidence = np.max(prediction)
 
+        # Display result
         st.markdown(f"""
             <div style='text-align: center; padding-top: 20px;'>
                 <h2>{predicted_label} {emoji_map[predicted_label]}</h2>
@@ -89,6 +99,7 @@ if st.button("Predict Emotion"):
             </div>
         """, unsafe_allow_html=True)
 
+        # Show chart
         probs_df = pd.DataFrame({
             "Emotion": emotion_labels,
             "Confidence": prediction.flatten()
@@ -101,4 +112,3 @@ if st.button("Predict Emotion"):
         ).properties(width=500)
 
         st.altair_chart(chart, use_container_width=True)
-
