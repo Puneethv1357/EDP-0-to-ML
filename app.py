@@ -95,14 +95,51 @@ button {
 """, unsafe_allow_html=True)
 
 # ---------- Title ----------
-st.markdown('<div class="container">', unsafe_allow_html=True)
 st.markdown("""
-<div class="title-bar">
-    <div style="width:24px;"></div>
-    <h2>Emotion Detector</h2>
-    <div style="width:24px;"></div>
-</div>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+body {
+    font-family: 'Manrope', sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+.container {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 24px 16px;
+    background: var(--background-color);
+    border-radius: 12px;
+}
+.title-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 16px;
+}
+.title-bar h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-color);
+    text-align: center;
+}
+textarea {
+    border-radius: 12px !important;
+    border: 1px solid #dde0e4 !important;
+    padding: 15px !important;
+    font-size: 16px !important;
+}
+button {
+    background-color: #327fcc;
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 24px;
+    margin-top: 10px;
+}
+</style>
 """, unsafe_allow_html=True)
+
 
 # ---------- Text Input ----------
 tweet = st.text_area(
