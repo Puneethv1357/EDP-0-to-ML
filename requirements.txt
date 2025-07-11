@@ -1,0 +1,5 @@
+altair
+streamlit
+tensorflow
+numpy
+scikit-learn
