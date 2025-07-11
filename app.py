@@ -26,49 +26,80 @@ emoji_map = {
 }
 maxlen = 50
 
-# ---------- Custom Styling ----------
-st.markdown("""
+# ---------- Custom Styling with Background Image ----------
+st.markdown(f"""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@600;800&display=swap');
 
-html, body, [class*="css"]  {
+html, body, [class*="css"] {{
     font-family: 'Manrope', sans-serif;
-}
+}}
 
-textarea, .stTextArea textarea {
+.stApp {{
+    background-image: url("https://images.unsplash.com/photo-1607082349560-61e02258d152?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}}
+
+textarea, .stTextArea textarea {{
     border-radius: 12px !important;
     border: 1px solid #cccccc !important;
-    background-color: var(--background-color);
-    color: var(--text-color);
+    background-color: rgba(255, 255, 255, 0.9);
+    color: #333;
     font-size: 16px !important;
     padding: 14px !important;
     outline: none !important;
     box-shadow: none !important;
-}
-textarea:focus, .stTextArea textarea:focus {
+}}
+
+textarea:focus, .stTextArea textarea:focus {{
     border: 1px solid #327fcc !important;
     box-shadow: none !important;
-}
-.stTextArea {
+}}
+
+.stTextArea {{
     margin-top: 10px;
-}
-button[kind="secondary"], button[kind="primary"] {
+}}
+
+button[kind="secondary"], button[kind="primary"] {{
     background-color: #327fcc !important;
     color: white !important;
     border-radius: 10px;
     padding: 0.6rem 1.4rem;
     font-weight: 700;
-}
-.title-block {
+}}
+
+.title-block {{
     text-align: center;
     margin-top: 10px;
     margin-bottom: 20px;
-}
-.title-block h1 {
+}}
+
+.title-block h1 {{
     font-size: 32px;
     font-weight: 800;
-    color: var(--text-color);
-}
+    color: #ffffff;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.4);
+}}
+
+hr {{
+    border: 0;
+    height: 1px;
+    background: #ccc;
+    margin: 2rem 0;
+}}
+
+details summary {{
+    font-size: 16px;
+    cursor: pointer;
+    color: #fff;
+}}
+
+details p {{
+    color: #ccc;
+}}
 </style>
 """, unsafe_allow_html=True)
 
@@ -122,9 +153,10 @@ if st.button("Analyze"):
 
 # ---------- Examples ----------
 st.markdown("""
-<hr style="margin-top: 32px; margin-bottom: 16px;">
-<h4 style="margin-bottom: 12px;">Examples</h4>
-<details style="margin-bottom: 10px;"><summary>I’m so happy today!</summary><p style="color:#677583;">Joy</p></details>
-<details style="margin-bottom: 10px;"><summary>I feel down today.</summary><p style="color:#677583;">Sadness</p></details>
-<details style="margin-bottom: 10px;"><summary>This is so frustrating!</summary><p style="color:#677583;">Anger</p></details>
+<hr>
+<h4 style="color:#fff;">Examples</h4>
+<details><summary>I’m so happy today!</summary><p>Joy</p></details>
+<details><summary>I feel down today.</summary><p>Sadness</p></details>
+<details><summary>This is so frustrating!</summary><p>Anger</p></details>
 """, unsafe_allow_html=True)
+
