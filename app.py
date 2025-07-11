@@ -29,11 +29,11 @@ st.markdown("""
 # Load model and tokenizer
 @st.cache_resource
 def load_model():
-    return tf.keras.models.load_model("model/best_emotion_model.keras")
+    return tf.keras.models.load_model("best_emotion_model (1).keras")
 
 @st.cache_resource
 def load_tokenizer():
-    with open("tokenizer/tokenizer.pkl", "rb") as f:
+    with open("tokenizer (4).pkl", "rb") as f:
         return pickle.load(f)
 
 model = load_model()
