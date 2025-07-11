@@ -8,7 +8,7 @@ import base64
 import os
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 
-# Load model and tokenizer
+# === Model & Tokenizer ===
 @st.cache_resource
 def load_model():
     return tf.keras.models.load_model("best_emotion_model (1).keras")
@@ -28,10 +28,10 @@ emoji_map = {
 }
 maxlen = 50
 
-# ---------- Streamlit Cloud-Compatible Background ----------
-def set_background_from_local(image_path):
-    file_path = os.path.join(os.path.dirname(__file__), image_path)
-    with open(file_path, "rb") as f:
+# === Set Background from Local Image ===
+def set_background(image_path):
+    abs_path = os.path.join(os.path.dirname(__file__), image_path)
+    with open(abs_path, "rb") as f:
         data = f.read()
     encoded = base64.b64encode(data).decode()
     st.markdown(
@@ -49,35 +49,43 @@ def set_background_from_local(image_path):
         unsafe_allow_html=True
     )
 
-# 👇 this path must match your folder structure
-set_background_from_local("assets/bg_2.png")
+set_background("assets/bg_2.png")  # Make sure this matches your repo path!
 
-# ---------- CSS Styling ----------
+# === Custom CSS Styling for Better Visibility ===
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@600;800&display=swap');
 
 html, body, [class*="css"] {
     font-family: 'Manrope', sans-serif;
+    color: #ffffff;
 }
+
+.stApp {{
+    color: white;
+}}
 
 textarea, .stTextArea textarea {
     border-radius: 12px !important;
-    border: 1px solid #cccccc !important;
-    background-color: rgba(255, 255, 255, 0.95);
-    color: #333;
+    border: 1px solid rgba(255, 255, 255, 0.4) !important;
+    background-color: rgba(0, 0, 0, 0.4) !important;
+    color: #fff !important;
     font-size: 16px !important;
     padding: 14px !important;
-    outline: none !important;
-    box-shadow: none !important;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.4) !important;
 }
 
-button[kind="secondary"], button[kind="primary"] {
-    background-color: #327fcc !important;
-    color: white !important;
+textarea::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+button[kind="primary"] {
+    background-color: #ffffff22 !important;
+    color: #ffffff !important;
     border-radius: 10px;
     padding: 0.6rem 1.4rem;
     font-weight: 700;
+    border: 1px solid #ffffff55;
 }
 
 .title-block {
@@ -87,40 +95,39 @@ button[kind="secondary"], button[kind="primary"] {
 }
 
 .title-block h1 {
-    font-size: 32px;
+    font-size: 34px;
     font-weight: 800;
     color: #ffffff;
-    text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
+    text-shadow: 0 2px 6px rgba(0,0,0,0.6);
 }
 
 details summary {
     font-size: 16px;
     cursor: pointer;
-    color: #fff;
+    color: #f0f0f0;
 }
-
 details p {
-    color: #ccc;
+    color: #cccccc;
 }
 </style>
 """, unsafe_allow_html=True)
 
-# ---------- Title ----------
+# === UI Title ===
 st.markdown("""
 <div class="title-block">
     <h1>Emotion Detector 💬</h1>
 </div>
 """, unsafe_allow_html=True)
 
-# ---------- Input ----------
+# === Input ===
 tweet = st.text_area(
     label="",
-    placeholder="Enter your text here...",
+    placeholder="Type your message here...",
     height=140,
     label_visibility="collapsed"
 )
 
-# ---------- Predict ----------
+# === Predict ===
 if st.button("Analyze"):
     if not tweet.strip():
         st.error("Please enter some text.")
@@ -132,16 +139,16 @@ if st.button("Analyze"):
         confidence = np.max(prediction)
 
         st.markdown(f"""
-        <div style='margin-top: 20px; display: flex; gap: 12px; align-items: center;'>
-            <div style='background:#f1f2f4; border-radius:8px; width:44px; height:44px; display:flex; justify-content:center; align-items:center; font-size:22px;'>{emoji_map[predicted_label]}</div>
+        <div style='margin-top: 20px; display: flex; gap: 12px; align-items: center; color: #fff;'>
+            <div style='background:rgba(255,255,255,0.1); border-radius:8px; width:44px; height:44px; display:flex; justify-content:center; align-items:center; font-size:22px;'>{emoji_map[predicted_label]}</div>
             <div>
                 <p style='margin:0; font-size:18px; font-weight:600;'>{predicted_label.title()}</p>
-                <p style='color: #677583; font-size:14px; margin-top: 4px;'>Confidence: {confidence:.1%}</p>
+                <p style='color: #ccc; font-size:14px; margin-top: 4px;'>Confidence: {confidence:.1%}</p>
             </div>
         </div>
         """, unsafe_allow_html=True)
 
-        # Bar Chart
+        # Confidence Chart
         probs_df = pd.DataFrame({
             "Emotion": emotion_labels,
             "Confidence": prediction.flatten()
@@ -149,11 +156,11 @@ if st.button("Analyze"):
         chart = alt.Chart(probs_df).mark_bar().encode(
             x=alt.X('Emotion', sort=None),
             y='Confidence',
-            color=alt.value("#327fcc")
+            color=alt.value("white")
         ).properties(width=460)
         st.altair_chart(chart, use_container_width=True)
 
-# ---------- Examples ----------
+# === Examples ===
 st.markdown("""
 <hr>
 <h4 style="color:#fff;">Examples</h4>
