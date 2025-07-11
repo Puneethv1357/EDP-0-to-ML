@@ -50,7 +50,7 @@ def set_background_from_local(image_path):
     )
 
 # 👇 this path must match your folder structure
-set_background_from_local("assets/anime_bg.png")
+set_background_from_local("assets/bg.png")
 
 # ---------- CSS Styling ----------
 st.markdown("""
