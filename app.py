@@ -5,6 +5,7 @@ import pickle
 import pandas as pd
 import altair as alt
 import base64
+import os
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 
 # Load model and tokenizer
@@ -27,9 +28,10 @@ emoji_map = {
 }
 maxlen = 50
 
-# ---------- Background Image Setup ----------
-def set_background(image_file_path):
-    with open(image_file_path, "rb") as f:
+# ---------- Streamlit Cloud-Compatible Background ----------
+def set_background_from_local(image_path):
+    file_path = os.path.join(os.path.dirname(__file__), image_path)
+    with open(file_path, "rb") as f:
         data = f.read()
     encoded = base64.b64encode(data).decode()
     st.markdown(
@@ -38,23 +40,24 @@ def set_background(image_file_path):
         .stApp {{
             background-image: url("data:image/png;base64,{encoded}");
             background-size: cover;
+            background-position: center;
             background-repeat: no-repeat;
             background-attachment: fixed;
-            background-position: center;
         }}
         </style>
         """,
         unsafe_allow_html=True
     )
 
-set_background("a89ada47-4255-457e-abdb-669c20be4e6a.png")
+# 👇 this path must match your folder structure
+set_background_from_local("assets/anime_bg.png")
 
-# ---------- Custom Styling ----------
+# ---------- CSS Styling ----------
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@600;800&display=swap');
 
-html, body, [class*="css"]  {
+html, body, [class*="css"] {
     font-family: 'Manrope', sans-serif;
 }
 
@@ -68,6 +71,7 @@ textarea, .stTextArea textarea {
     outline: none !important;
     box-shadow: none !important;
 }
+
 button[kind="secondary"], button[kind="primary"] {
     background-color: #327fcc !important;
     color: white !important;
@@ -75,22 +79,26 @@ button[kind="secondary"], button[kind="primary"] {
     padding: 0.6rem 1.4rem;
     font-weight: 700;
 }
+
 .title-block {
     text-align: center;
     margin-top: 10px;
     margin-bottom: 20px;
 }
+
 .title-block h1 {
     font-size: 32px;
     font-weight: 800;
     color: #ffffff;
     text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
 }
+
 details summary {
     font-size: 16px;
     cursor: pointer;
     color: #fff;
 }
+
 details p {
     color: #ccc;
 }
@@ -153,3 +161,4 @@ st.markdown("""
 <details><summary>I feel down today.</summary><p>Sadness</p></details>
 <details><summary>This is so frustrating!</summary><p>Anger</p></details>
 """, unsafe_allow_html=True)
+
