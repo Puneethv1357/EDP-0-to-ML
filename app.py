@@ -18,72 +18,106 @@ def load_tokenizer():
 
 model = load_model()
 tokenizer = load_tokenizer()
+
 emotion_labels = ['sadness', 'joy', 'love', 'anger', 'fear', 'surprise']
-emoji_map = {'joy': '😊', 'sadness': '😢', 'anger': '😠', 'love': '❤️', 'fear': '😨', 'surprise': '😲'}
+emoji_map = {
+    'joy': '😊', 'sadness': '😢', 'anger': '😠',
+    'love': '❤️', 'fear': '😨', 'surprise': '😲'
+}
 maxlen = 50
 
-# Tailwind + Font styling
+# ---------- HTML + CSS Styling ----------
 st.markdown("""
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Noto+Sans:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-    html, body, [class*="css"] {
-        font-family: 'Manrope', 'Noto Sans', sans-serif;
-        background-color: #ffffff;
-    }
-    .title-section {
-        padding: 20px 16px 8px 16px;
-        background: white;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-    .textarea-box textarea {
-        border-radius: 12px;
-        padding: 15px;
-        border: 1px solid #dde0e4;
-        font-size: 16px;
-        resize: none;
-        min-height: 140px;
-        color: #121417;
-    }
-    .analyze-button {
-        background-color: #327fcc;
-        color: white;
-        border-radius: 12px;
-        padding: 10px 20px;
-        font-weight: bold;
-        border: none;
-        margin-top: 10px;
-    }
+body {
+    font-family: 'Manrope', sans-serif;
+    background-color: #f9fafb;
+}
+.container {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 24px 16px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.05);
+}
+.title-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+.title-bar h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #121417;
+    text-align: center;
+    flex-grow: 1;
+}
+textarea {
+    border-radius: 12px !important;
+    border: 1px solid #dde0e4 !important;
+    padding: 15px !important;
+    font-size: 16px !important;
+}
+button {
+    background-color: #327fcc;
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 24px;
+    margin-top: 10px;
+}
+.result-box {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 24px;
+}
+.result-icon {
+    background: #f1f2f4;
+    border-radius: 8px;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+}
+.confidence {
+    color: #677583;
+    font-size: 14px;
+    margin-top: 6px;
+}
 </style>
 """, unsafe_allow_html=True)
 
-# App Title Section
+# ---------- Title ----------
+st.markdown('<div class="container">', unsafe_allow_html=True)
 st.markdown("""
-<div class="title-section">
-    <div>
-        <svg width="24" height="24" fill="currentColor" viewBox="0 0 256 256">
-            <path d="M224,128a8,8,0,0,1-8,8H59.31l58.35,58.34a8,8,0,0,1-11.32,11.32l-72-72a8,8,0,0,1,0-11.32l72-72a8,8,0,0,1,11.32,11.32L59.31,120H216A8,8,0,0,1,224,128Z"/>
-        </svg>
-    </div>
-    <h2 style="font-size: 20px; font-weight: bold; margin: 0 auto;">Emotion Detector</h2>
+<div class="title-bar">
+    <div style="width:24px;"></div>
+    <h2>Emotion Detector</h2>
+    <div style="width:24px;"></div>
 </div>
 """, unsafe_allow_html=True)
 
-# Text Input Area
+# ---------- Text Input ----------
 tweet = st.text_area(
     label="",
-    placeholder="Enter text here...",
+    placeholder="Enter your text here...",
     height=140,
     label_visibility="collapsed"
 )
 
-# Predict Button
-if st.button("Analyze", use_container_width=True):
+# ---------- Predict Button ----------
+if st.button("Analyze"):
     if not tweet.strip():
-        st.warning("Please enter some text.")
+        st.warning("Please enter some text to analyze.")
     else:
-        # Preprocess and predict
+        # Preprocess
         seq = tokenizer.texts_to_sequences([tweet])
         padded = pad_sequences(seq, maxlen=maxlen, padding="post", truncating="post")
         prediction = model.predict(padded)
@@ -92,17 +126,16 @@ if st.button("Analyze", use_container_width=True):
 
         # Result
         st.markdown(f"""
-        <div style="padding: 20px 16px;">
-            <h3 style="font-size: 18px; font-weight: bold;">Detected Emotion</h3>
-            <div style="display: flex; align-items: center; gap: 12px; margin-top: 8px;">
-                <div style="width: 40px; height: 40px; background-color: #f1f2f4; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 20px;">{emoji_map[predicted_label]}</div>
-                <p style="font-size: 16px; margin: 0;">{predicted_label.title()}</p>
+        <div class="result-box">
+            <div class="result-icon">{emoji_map[predicted_label]}</div>
+            <div>
+                <p style="margin: 0; font-size: 18px; font-weight: 600;">{predicted_label.title()}</p>
+                <p class="confidence">Confidence: {confidence:.1%}</p>
             </div>
-            <p style="color: #677583; font-size: 14px; margin-top: 8px;">Confidence: {confidence:.2%}</p>
         </div>
         """, unsafe_allow_html=True)
 
-        # Chart
+        # ---------- Chart ----------
         probs_df = pd.DataFrame({
             "Emotion": emotion_labels,
             "Confidence": prediction.flatten()
@@ -111,15 +144,16 @@ if st.button("Analyze", use_container_width=True):
             x=alt.X('Emotion', sort=None),
             y='Confidence',
             color=alt.value("#327fcc")
-        ).properties(width=500)
+        ).properties(width=460)
         st.altair_chart(chart, use_container_width=True)
 
-# Example Section
+# ---------- Examples ----------
 st.markdown("""
-<h3 style="padding: 16px; font-weight: bold;">Examples</h3>
-<div style="padding: 0 16px 16px;">
-<details style="margin-bottom: 10px;"><summary>I'm so happy today!</summary><p style="color: #677583;">Joy</p></details>
-<details style="margin-bottom: 10px;"><summary>I feel down today.</summary><p style="color: #677583;">Sadness</p></details>
-<details><summary>This is so frustrating!</summary><p style="color: #677583;">Anger</p></details>
-</div>
+<hr style="margin-top: 32px; margin-bottom: 16px;">
+<h4 style="margin-bottom: 12px;">Examples</h4>
+<details style="margin-bottom: 10px;"><summary>I’m so happy today!</summary><p class="confidence">Joy</p></details>
+<details style="margin-bottom: 10px;"><summary>I feel down today.</summary><p class="confidence">Sadness</p></details>
+<details style="margin-bottom: 10px;"><summary>This is so frustrating!</summary><p class="confidence">Anger</p></details>
 """, unsafe_allow_html=True)
+
+st.markdown('</div>', unsafe_allow_html=True)  # close .container
