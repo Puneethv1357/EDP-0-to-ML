@@ -26,51 +26,60 @@ emoji_map = {
 }
 maxlen = 50
 
-# ---------- HTML + CSS ----------
+# ---------- Custom Styling ----------
 st.markdown("""
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-body {
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@600;800&display=swap');
+
+html, body, [class*="css"]  {
     font-family: 'Manrope', sans-serif;
+}
+
+textarea, .stTextArea textarea {
+    border-radius: 12px !important;
+    border: 1px solid #cccccc !important;
     background-color: var(--background-color);
     color: var(--text-color);
-}
-.container {
-    max-width: 480px;
-    margin: 0 auto;
-    padding: 24px 16px;
-    background: var(--background-color);
-    border-radius: 12px;
-}
-textarea {
-    border-radius: 12px !important;
-    border: 1px solid #dde0e4 !important;
-    padding: 15px !important;
     font-size: 16px !important;
+    padding: 14px !important;
+    outline: none !important;
+    box-shadow: none !important;
 }
-button {
-    background-color: #327fcc;
-    color: white;
-    font-weight: bold;
-    border: none;
+textarea:focus, .stTextArea textarea:focus {
+    border: 1px solid #327fcc !important;
+    box-shadow: none !important;
+}
+.stTextArea {
+    margin-top: 10px;
+}
+button[kind="secondary"], button[kind="primary"] {
+    background-color: #327fcc !important;
+    color: white !important;
     border-radius: 10px;
-    padding: 10px 24px;
-    margin-top: 10px;
+    padding: 0.6rem 1.4rem;
+    font-weight: 700;
 }
-.custom-warning {
-    color: #ffa726;
-    background-color: #fff3e0;
-    border-radius: 8px;
-    padding: 12px;
+.title-block {
+    text-align: center;
     margin-top: 10px;
+    margin-bottom: 20px;
+}
+.title-block h1 {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--text-color);
 }
 </style>
 """, unsafe_allow_html=True)
 
-# ---------- Layout Container ----------
-st.markdown('<div class="container">', unsafe_allow_html=True)
+# ---------- Title ----------
+st.markdown("""
+<div class="title-block">
+    <h1>Emotion Detector 💬</h1>
+</div>
+""", unsafe_allow_html=True)
 
-# ---------- Text Input ----------
+# ---------- Input ----------
 tweet = st.text_area(
     label="",
     placeholder="Enter your text here...",
@@ -78,19 +87,17 @@ tweet = st.text_area(
     label_visibility="collapsed"
 )
 
-# ---------- Button + Logic ----------
+# ---------- Predict ----------
 if st.button("Analyze"):
     if not tweet.strip():
-        st.markdown('<div class="custom-warning">Please enter some text to analyze.</div>', unsafe_allow_html=True)
+        st.error("Please enter some text.")
     else:
-        # Preprocess
         seq = tokenizer.texts_to_sequences([tweet])
         padded = pad_sequences(seq, maxlen=maxlen, padding="post", truncating="post")
         prediction = model.predict(padded)
         predicted_label = emotion_labels[np.argmax(prediction)]
         confidence = np.max(prediction)
 
-        # Result
         st.markdown(f"""
         <div style='margin-top: 20px; display: flex; gap: 12px; align-items: center;'>
             <div style='background:#f1f2f4; border-radius:8px; width:44px; height:44px; display:flex; justify-content:center; align-items:center; font-size:22px;'>{emoji_map[predicted_label]}</div>
@@ -101,7 +108,7 @@ if st.button("Analyze"):
         </div>
         """, unsafe_allow_html=True)
 
-        # ---------- Chart ----------
+        # Bar Chart
         probs_df = pd.DataFrame({
             "Emotion": emotion_labels,
             "Confidence": prediction.flatten()
@@ -121,5 +128,3 @@ st.markdown("""
 <details style="margin-bottom: 10px;"><summary>I feel down today.</summary><p style="color:#677583;">Sadness</p></details>
 <details style="margin-bottom: 10px;"><summary>This is so frustrating!</summary><p style="color:#677583;">Anger</p></details>
 """, unsafe_allow_html=True)
-
-st.markdown('</div>', unsafe_allow_html=True)
