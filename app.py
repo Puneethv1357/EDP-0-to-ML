@@ -26,75 +26,7 @@ emoji_map = {
 }
 maxlen = 50
 
-# ---------- HTML + CSS Styling ----------
-st.markdown("""
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
-<style>
-body {
-    font-family: 'Manrope', sans-serif;
-    background-color: #f9fafb;
-}
-.container {
-    max-width: 480px;
-    margin: 0 auto;
-    padding: 24px 16px;
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.05);
-}
-.title-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 16px;
-}
-.title-bar h2 {
-    font-size: 22px;
-    font-weight: 700;
-    color: #121417;
-    text-align: center;
-    flex-grow: 1;
-}
-textarea {
-    border-radius: 12px !important;
-    border: 1px solid #dde0e4 !important;
-    padding: 15px !important;
-    font-size: 16px !important;
-}
-button {
-    background-color: #327fcc;
-    color: white;
-    font-weight: bold;
-    border: none;
-    border-radius: 10px;
-    padding: 10px 24px;
-    margin-top: 10px;
-}
-.result-box {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-top: 24px;
-}
-.result-icon {
-    background: #f1f2f4;
-    border-radius: 8px;
-    width: 44px;
-    height: 44px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
-}
-.confidence {
-    color: #677583;
-    font-size: 14px;
-    margin-top: 6px;
-}
-</style>
-""", unsafe_allow_html=True)
-
-# ---------- Title ----------
+# ---------- HTML + CSS ----------
 st.markdown("""
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
@@ -110,18 +42,6 @@ body {
     background: var(--background-color);
     border-radius: 12px;
 }
-.title-bar {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 16px;
-}
-.title-bar h2 {
-    font-size: 22px;
-    font-weight: 700;
-    color: var(--text-color);
-    text-align: center;
-}
 textarea {
     border-radius: 12px !important;
     border: 1px solid #dde0e4 !important;
@@ -137,9 +57,18 @@ button {
     padding: 10px 24px;
     margin-top: 10px;
 }
+.custom-warning {
+    color: #ffa726;
+    background-color: #fff3e0;
+    border-radius: 8px;
+    padding: 12px;
+    margin-top: 10px;
+}
 </style>
 """, unsafe_allow_html=True)
 
+# ---------- Layout Container ----------
+st.markdown('<div class="container">', unsafe_allow_html=True)
 
 # ---------- Text Input ----------
 tweet = st.text_area(
@@ -149,10 +78,10 @@ tweet = st.text_area(
     label_visibility="collapsed"
 )
 
-# ---------- Predict Button ----------
+# ---------- Button + Logic ----------
 if st.button("Analyze"):
     if not tweet.strip():
-        st.warning("Please enter some text to analyze.")
+        st.markdown('<div class="custom-warning">Please enter some text to analyze.</div>', unsafe_allow_html=True)
     else:
         # Preprocess
         seq = tokenizer.texts_to_sequences([tweet])
@@ -163,11 +92,11 @@ if st.button("Analyze"):
 
         # Result
         st.markdown(f"""
-        <div class="result-box">
-            <div class="result-icon">{emoji_map[predicted_label]}</div>
+        <div style='margin-top: 20px; display: flex; gap: 12px; align-items: center;'>
+            <div style='background:#f1f2f4; border-radius:8px; width:44px; height:44px; display:flex; justify-content:center; align-items:center; font-size:22px;'>{emoji_map[predicted_label]}</div>
             <div>
-                <p style="margin: 0; font-size: 18px; font-weight: 600;">{predicted_label.title()}</p>
-                <p class="confidence">Confidence: {confidence:.1%}</p>
+                <p style='margin:0; font-size:18px; font-weight:600;'>{predicted_label.title()}</p>
+                <p style='color: #677583; font-size:14px; margin-top: 4px;'>Confidence: {confidence:.1%}</p>
             </div>
         </div>
         """, unsafe_allow_html=True)
@@ -188,9 +117,9 @@ if st.button("Analyze"):
 st.markdown("""
 <hr style="margin-top: 32px; margin-bottom: 16px;">
 <h4 style="margin-bottom: 12px;">Examples</h4>
-<details style="margin-bottom: 10px;"><summary>I’m so happy today!</summary><p class="confidence">Joy</p></details>
-<details style="margin-bottom: 10px;"><summary>I feel down today.</summary><p class="confidence">Sadness</p></details>
-<details style="margin-bottom: 10px;"><summary>This is so frustrating!</summary><p class="confidence">Anger</p></details>
+<details style="margin-bottom: 10px;"><summary>I’m so happy today!</summary><p style="color:#677583;">Joy</p></details>
+<details style="margin-bottom: 10px;"><summary>I feel down today.</summary><p style="color:#677583;">Sadness</p></details>
+<details style="margin-bottom: 10px;"><summary>This is so frustrating!</summary><p style="color:#677583;">Anger</p></details>
 """, unsafe_allow_html=True)
 
-st.markdown('</div>', unsafe_allow_html=True)  # close .container
+st.markdown('</div>', unsafe_allow_html=True)
