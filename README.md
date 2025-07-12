@@ -21,4 +21,6 @@ And the emotion class distribution across the total data that is used is as foll
 This concludes the preprocessing of the datasetr that we choose . Shout out to Daksh singh his github repo is [here](https://github.com/D0905-ux) do check it out.
 
 # Model design and training 
-This is also one of the crucial parts of the project preprocessing done what to do with it without a model right ? . Here is what our team member has to say about [model desining and training](https://docs.google.com/document/d/1EOMEaN88uFxOhpIHro5SUKC20nWhUXK659GlZTBAy80/edit?addon_store&tab=t.0#heading=h.ilg8u4xwz13x)
+This is also one of the crucial parts of the project preprocessing done what to do with it without a model right ? . Here is what our team member has to say about [model desining and training](https://docs.google.com/document/d/1EOMEaN88uFxOhpIHro5SUKC20nWhUXK659GlZTBAy80/edit?addon_store&tab=t.0#heading=h.ilg8u4xwz13x) a dive into the how it is structured and what are the regulizers used dropout and short note on biLSTM. The validation accuracy and train accuracy is in the graph towards left where as the train loss and validation loss graph is on the right with no.of epochs on the X-axis
+
+![graphs](https://github.com/Puneethv1357/EDP-0-to-ML/blob/0c86d4dabaadca4ba02e9e429bf0f5602b0d5e7d/images/plots.png)
