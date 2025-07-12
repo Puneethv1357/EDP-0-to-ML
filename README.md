@@ -7,3 +7,4 @@ This marks our efforts in desinging a nlp model that can take an input test and 
 
 # NLP Preprocess
 
+About the preprocessing by the memeber of the team who dealt with it [A breifing about Preprocessing](https://docs.google.com/document/d/155r8F63NpeFQdOJJuy7jcSLpI0RqhAs02YyWSQBTnxo/edit?tab=t.0)
