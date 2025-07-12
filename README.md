@@ -54,3 +54,5 @@ VOILA!!! The prediction with the the confidence bar graph are generated based on
 
 
 ![prediction](https://github.com/Puneethv1357/EDP-0-to-ML/blob/6254e9706940a04701bc9d6185ce6278987fceb4/images/prediction.png)
+
+Short video for guidance ![video](https://github.com/Puneethv1357/EDP-0-to-ML/blob/6a4cd1a92b017594d4f8d6c09424ee8e4f684ca9/images/Untitled%20video%20-%20Made%20with%20Clipchamp.mp4)
