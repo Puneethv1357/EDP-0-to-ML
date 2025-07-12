@@ -62,10 +62,13 @@ This project was developed as part of a collaborative team effort. The contribut
 Daksh Singh – Responsible for all data preprocessing steps including text cleaning, tokenization, lemmatization, and vocabulary generation using spaCy.
 Contact info
 [github](https://github.com/D0905-ux)
+
 R.Poornashree – Focused on model design and training, including BiLSTM architecture, hyperparameter tuning, and performance evaluation.
 Contact info
 [github](https://github.com/Poornasshreee)
+
 V.Puneeth – Handled end-to-end integration, UI development using Streamlit, project documentation, and model deployment preparation.
 Contact info
 [github](https://github.com/Puneethv1357)
+
 We worked together to build a complete and robust Emotion Detection system using deep learning and NLP.
