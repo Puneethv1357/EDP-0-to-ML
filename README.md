@@ -35,4 +35,22 @@ This concludes the preprocessing of the datasetr that we choose . Shout out to R
 
 # Web app design and deployment 
 
-This is the part i dealt with along with along with maintaining the github repo that you are looking at right now. The web app is desiged suh that it can be deployed in the 
+This is the part i dealt with along with along with maintaining the github repo that you are looking at right now. The web app is desiged such that it can be deployed pn streamlit platformnohing grand but a good looking ui that takes a input and produces the output along with a bar graph indicting confidence of each emotion. A small guide on how to use this web app is ass follows 
+
+
+First setp ennter the text in the text box that is provided to you
+
+
+![entering test](https://github.com/Puneethv1357/EDP-0-to-ML/blob/48035de3199b40570c5997b846efbe4a27a8b79d/images/Entering%20text%20.png)
+
+
+Second step click on the analyze button 
+
+
+![analyze](https://github.com/Puneethv1357/EDP-0-to-ML/blob/48035de3199b40570c5997b846efbe4a27a8b79d/images/click%20analyze.png)
+
+
+VOILA!!! The prediction with the the confidence bar graph are generated based on your input 
+
+
+![prediction](https://github.com/Puneethv1357/EDP-0-to-ML/blob/48035de3199b40570c5997b846efbe4a27a8b79d/images/prediction.png)
