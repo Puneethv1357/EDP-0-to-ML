@@ -7,6 +7,10 @@ This marks our efforts in desinging a nlp model that can take an input test and 
 
 # NLP Preprocess
 
-About the preprocessing by the memeber of the team who dealt with it [A breifing about Preprocessing](https://docs.google.com/document/d/155r8F63NpeFQdOJJuy7jcSLpI0RqhAs02YyWSQBTnxo/edit?tab=t.0). This provides the reason behind all the preprocess we haqve do so far in this project with tabels indicating how the data has been manipulated to be abel to feed it to the model that was being designed. The token lenghts across three datasets the training , validation and test data set are as folllows ![Token lengths](https://github.com/Puneethv1357/EDP-0-to-ML/blob/da64b5109ced7cadf084392f6f9147c839cc68f0/images/Screenshot%202025-07-03%20175541.png)
+About the preprocessing by the memeber of the team who dealt with it [A breifing about Preprocessing](https://docs.google.com/document/d/155r8F63NpeFQdOJJuy7jcSLpI0RqhAs02YyWSQBTnxo/edit?tab=t.0). This provides the reason behind all the preprocess we haqve do so far in this project with tabels indicating how the data has been manipulated to be abel to feed it to the model that was being designed. The token lenghts across three datasets the training , validation and test data set are as folllows
 
-And the emotion class distribution across the total data that is used is as follows ![Class distribution](https://github.com/Puneethv1357/EDP-0-to-ML/blob/86409d940b51f171b79001fdcbe24773f5276487/images/emotion%20class%20distribution.png)
+![Token lengths](https://github.com/Puneethv1357/EDP-0-to-ML/blob/da64b5109ced7cadf084392f6f9147c839cc68f0/images/Screenshot%202025-07-03%20175541.png)
+
+And the emotion class distribution across the total data that is used is as follows 
+
+![Class distribution](https://github.com/Puneethv1357/EDP-0-to-ML/blob/86409d940b51f171b79001fdcbe24773f5276487/images/emotion%20class%20distribution.png)
