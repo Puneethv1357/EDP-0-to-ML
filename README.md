@@ -35,7 +35,7 @@ This concludes the preprocessing of the dataset that we chose. Shout out to R. P
 
 # Web app design and deployment 
 
-This is the part I dealt with, along with maintaining the GitHub repo that you are looking at right now. The web app is designed to be deployed on the Streamlit platform. It is nothing grand but a good-looking UI that takes input and produces output, along with a bar graph indicating the confidence of each emotion. A small guide on how to use this web [app](https://emotion-detector-0.streamlit.app/) is as follows 
+This is the part I dealt with, along with maintaining the GitHub repo that you are looking at right now. The web app is designed to be deployed on the Streamlit platform. It is nothing grand but a good-looking UI that takes input and produces output, along with a bar graph indicating the confidence of each emotion. A small guide on how to use this [web app](https://emotion-detector-0.streamlit.app/) is as follows 
 
 
 In the first step, enter the text in the text box that is provided.
