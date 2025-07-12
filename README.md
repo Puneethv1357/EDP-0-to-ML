@@ -53,4 +53,4 @@ Second step click on the analyze button
 VOILA!!! The prediction with the the confidence bar graph are generated based on your input 
 
 
-![prediction]([https://github.com/Puneethv1357/EDP-0-to-ML/blob/48035de3199b40570c5997b846efbe4a27a8b79d/images/prediction.png](https://github.com/Puneethv1357/EDP-0-to-ML/blob/6254e9706940a04701bc9d6185ce6278987fceb4/images/prediction.png))
+![prediction](https://github.com/Puneethv1357/EDP-0-to-ML/blob/6254e9706940a04701bc9d6185ce6278987fceb4/images/prediction.png)
