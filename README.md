@@ -18,4 +18,4 @@ And the emotion class distribution across the total data that is used is as foll
 
 ![Class distribution](https://github.com/Puneethv1357/EDP-0-to-ML/blob/86409d940b51f171b79001fdcbe24773f5276487/images/emotion%20class%20distribution.png)
 
-This concludes the preprocessing of the datasetr that we choose . Shout out to [Daksh singh](https://github.com/D0905-ux)
+This concludes the preprocessing of the datasetr that we choose . Shout out to Daksh singh his github repo is [here](https://github.com/D0905-ux) do check it out
