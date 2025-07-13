@@ -8,7 +8,7 @@ import base64
 import os
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 
-# === Model & Tokenizer ===
+
 @st.cache_resource
 def load_model():
     return tf.keras.models.load_model("best_emotion_model (1).keras")
@@ -28,7 +28,7 @@ emoji_map = {
 }
 maxlen = 50
 
-# === Set Background from Local Image ===
+
 def set_background(image_path):
     abs_path = os.path.join(os.path.dirname(__file__), image_path)
     with open(abs_path, "rb") as f:
@@ -49,9 +49,9 @@ def set_background(image_path):
         unsafe_allow_html=True
     )
 
-set_background("assets/bg_2.png")  # Make sure this matches your repo path!
+set_background("assets/bg_2.png") 
 
-# === Custom CSS Styling for Better Visibility ===
+
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@600;800&display=swap');
@@ -112,14 +112,14 @@ details p {
 </style>
 """, unsafe_allow_html=True)
 
-# === UI Title ===
+
 st.markdown("""
 <div class="title-block">
     <h1>Emotion Detector 💬</h1>
 </div>
 """, unsafe_allow_html=True)
 
-# === Input ===
+
 tweet = st.text_area(
     label="",
     placeholder="Type your message here...",
@@ -127,7 +127,7 @@ tweet = st.text_area(
     label_visibility="collapsed"
 )
 
-# === Predict ===
+
 if st.button("Analyze"):
     if not tweet.strip():
         st.error("Please enter some text.")
@@ -148,7 +148,7 @@ if st.button("Analyze"):
         </div>
         """, unsafe_allow_html=True)
 
-        # Confidence Chart
+      
         probs_df = pd.DataFrame({
             "Emotion": emotion_labels,
             "Confidence": prediction.flatten()
@@ -160,7 +160,7 @@ if st.button("Analyze"):
         ).properties(width=460)
         st.altair_chart(chart, use_container_width=True)
 
-# === Examples ===
+
 st.markdown("""
 <hr>
 <h4 style="color:#fff;">Examples</h4>
